@@ -16,6 +16,59 @@ el juego tic tac toe con WebScockets, demostrando las habilidades técnicas adqu
 ## Estructura del laboratorio
 
 ```bash
+├───.idea
+├───.mvn
+│   └───wrapper
+├───img
+├───src
+│   ├───main
+│   │   ├───java
+│   │   │   └───edu
+│   │   │       └───eci
+│   │   │           └───arsw
+│   │   │               └───TicTacToe
+│   │   │                   ├───config
+│   │   │                   ├───handler
+│   │   │                   └───model
+│   │   └───resources
+│   │       └───static
+│   │           └───js
+│   │               └───components
+│   └───test
+│       └───java
+│           └───edu
+│               └───eci
+│                   └───arsw
+│                       └───TicTacToe
+└───target
+    ├───classes
+    │   ├───edu
+    │   │   └───eci
+    │   │       └───arsw
+    │   │           └───TicTacToe
+    │   │               ├───config
+    │   │               ├───handler
+    │   │               └───model
+    │   └───static
+    │       └───js
+    │           └───components
+    ├───generated-sources
+    │   └───annotations
+    ├───generated-test-sources
+    │   └───test-annotations
+    ├───maven-archiver
+    ├───maven-status
+    │   └───maven-compiler-plugin
+    │       ├───compile
+    │       │   └───default-compile
+    │       └───testCompile
+    │           └───default-testCompile
+    ├───surefire-reports
+    └───test-classes
+        └───edu
+            └───eci
+                └───arsw
+                    └───TicTacToe
 
 ```
 ---
