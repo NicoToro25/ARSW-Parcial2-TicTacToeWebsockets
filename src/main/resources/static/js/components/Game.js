@@ -1,76 +1,89 @@
-// js/components/Game.js
-function Game() {
-    const [history, setHistory] = React.useState([Array(9).fill(null)]);
-    const [currentMove, setCurrentMove] = React.useState(0);
-    const [isAscending, setIsAscending] = React.useState(true);
-    const xIsNext = currentMove % 2 === 0;
-    const currentSquares = history[currentMove];
+function Game({ gameId, onLeaveGame }) {
+    const [squares, setSquares] = React.useState(Array(9).fill(null));
+    const [currentPlayer, setCurrentPlayer] = React.useState('X');
+    const [winner, setWinner] = React.useState(null);
+    const [gameOver, setGameOver] = React.useState(false);
+    const [mySymbol, setMySymbol] = React.useState(null);
+    const [playersCount, setPlayersCount] = React.useState(1);
 
-    function handlePlay(nextSquares) {
-        const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-        setHistory(nextHistory);
-        setCurrentMove(nextHistory.length - 1);
-    }
+    React.useEffect(() => {
+        // Configurar handlers de WebSocket
+        const handleGameState = (message) => {
+            console.log('Game state received:', message);
+            setSquares(message.board || Array(9).fill(null));
+            setCurrentPlayer(message.currentPlayer || 'X');
+            setWinner(message.winner);
+            setGameOver(message.gameOver || false);
+            setPlayersCount(message.playersCount || 1);
+        };
 
-    function jumpTo(nextMove) {
-        setCurrentMove(nextMove);
-    }
+        const handleGameCreated = (message) => {
+            console.log('Game created:', message);
+            setMySymbol(message.playerSymbol);
+        };
 
-    function toggleSortOrder() {
-        setIsAscending(!isAscending);
-    }
+        const handleError = (message) => {
+            console.error('WebSocket error:', message);
+            alert('Error: ' + message.message);
+        };
 
-    const moves = history.map((squares, move) => {
-        let description;
-        if (move > 0) {
-            // Encontrar la posición del último movimiento
-            const prevSquares = history[move - 1];
-            let position = '';
-            for (let i = 0; i < squares.length; i++) {
-                if (squares[i] !== prevSquares[i]) {
-                    const row = Math.floor(i / 3) + 1;
-                    const col = (i % 3) + 1;
-                    position = ` (${row}, ${col})`;
-                    break;
-                }
-            }
+        gameClient.on('GAME_STATE', handleGameState);
+        gameClient.on('GAME_CREATED', handleGameCreated);
+        gameClient.on('ERROR', handleError);
 
-            description = 'Ir al movimiento #' + move + position;
+        // Limpiar handlers al desmontar
+        return () => {
+            gameClient.handlers.delete('GAME_STATE');
+            gameClient.handlers.delete('GAME_CREATED');
+            gameClient.handlers.delete('ERROR');
+        };
+    }, []);
+
+    const handlePlay = (position) => {
+        console.log('Making move at position:', position);
+        gameClient.makeMove(position);
+    };
+
+    const handleReset = () => {
+        gameClient.resetGame();
+    };
+
+    const handleLeave = () => {
+        gameClient.disconnect();
+        onLeaveGame();
+    };
+
+    let status;
+    if (winner === 'TIE') {
+        status = '¡Empate!';
+    } else if (winner) {
+        status = `¡Ganador: ${winner}!`;
+    } else {
+        status = `Turno: ${currentPlayer}`;
+        if (currentPlayer === mySymbol) {
+            status += ' (Tu turno)';
         } else {
-            description = 'Ir al inicio del juego';
+            status += ' (Turno del oponente)';
         }
-
-        return (
-            <li key={move}>
-                {move === currentMove ? (
-                    <span>Estás en el movimiento #{move}</span>
-                ) : (
-                    <button onClick={() => jumpTo(move)}>
-                        {description}
-                    </button>
-                )}
-            </li>
-        );
-    });
-
-    const sortedMoves = isAscending ? moves : moves.slice().reverse();
+    }
 
     return (
-        <div className="game">
-            <div className="game-board">
-                <Board
-                    xIsNext={xIsNext}
-                    squares={currentSquares}
-                    onPlay={handlePlay}
-                />
-            </div>
-            <div className="game-info">
-                <div>
-                    <button onClick={toggleSortOrder}>
-                        Orden: {isAscending ? 'Ascendente' : 'Descendente'}
-                    </button>
-                </div>
-                <ol>{sortedMoves}</ol>
+        <div style={{ padding: '20px', border: '1px solid #ccc', margin: '10px' }}>
+            <h2>Juego: {gameId}</h2>
+            <p><strong>Tu símbolo:</strong> {mySymbol || 'Esperando...'} | <strong>Jugadores:</strong> {playersCount}/2</p>
+            <div style={{ margin: '10px 0', fontWeight: 'bold' }}>{status}</div>
+
+            <Board
+                squares={squares}
+                onPlay={handlePlay}
+                currentPlayer={currentPlayer}
+                mySymbol={mySymbol}
+                gameOver={gameOver}
+            />
+
+            <div style={{ marginTop: '10px' }}>
+                <button onClick={handleReset}>Reiniciar</button>
+                <button onClick={handleLeave} style={{ marginLeft: '10px' }}>Salir</button>
             </div>
         </div>
     );

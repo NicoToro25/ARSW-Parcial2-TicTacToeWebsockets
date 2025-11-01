@@ -65,10 +65,39 @@ mvn exec:java@
 
 Si se tiene algún inconveniente con la ejecución, asegúrarse de que las variables de entorno de Java y Maven estén correctamente configuradas y de estar ubicado en la carpeta correspondiente antes de ejecutar los comandos.
 
+---
+
+## Enunciado
+
+Teniendo como referencia el ejercicio propuesto para el parcial realice los siguientes pasos
+
+1. Aprenda a construir un Juego Tic Tac Toe siguiendo el tutorial que se indica aquí: [Tutorial](https://reactjs.org/tutorial/tutorial.html#before-we-start-the-tutorial) (Repositorio ya construido)
+
+2. A partir de este Juego construya una aplicación interactiva usando WebSockets que permita:
+
+1. Crear una sala
+
+2. Entrar a una sala
+
+3. Jugar a dos jugadores en forma interactiva una partida de Tic Tac Toe
+
+4. El sistema debe persistir las salas y el estado de Juego a una base de datos.
+
+5. El sistema debe permitir retroceder en la historia en cada sala. Una sala recuperada de la base de datos debe traer sus historia y permitir por ejemplo retroceder en el juego normalmente.
+
+Entregables:
+
+1. Proyecto en GitHub, bien documentado.
+2. El README debe contener toda la documentación y evidencias del funcionamiento (Pantallazos) SI NO HAY EVIDENCIAS LA NOTA ES 1.
+   BONO: Desplegado en la nube.
 
 ---
 
-1. Como primer paso, se crea el proyecto usando spring initializr y se modifica el poim.xml con las dependencias necesarias.
+## Solución
+
+### Backend
+
+1. Como primer paso, se crea el proyecto usando spring initializr y se modifica el pom.xml con las dependencias necesarias.
 Se recomienda mirar el pom.xml y verificar las siguientes dependencias:
 
 ```` bash
@@ -82,25 +111,58 @@ Se recomienda mirar el pom.xml y verificar las siguientes dependencias:
 		</dependency>
 ````
 
-2. Previamente se construyo todo el FRONT, se encuentra en la carpeta src/main/resources/static.
+2. Como en un comienzo el proyecto fue hecho con toda la lógica desde el FRONT, se migra dicha lógica al back.
 
-3. Como en un comienzo el proyecto fue hecho con toda la lógica desde el FRONT, se migra dicha lógica al back con el modelo: MVC.
+(Se tuvo que configurar el JDK en la elaboración)
 
-(Se tuvo que configurar el JDK)
-
-4. Se comienza identificando el modelo que consta de dos clases jugador y y juego.
+3. Se comienza identificando el modelo que consta de dos clases "Player" y "Game".
 
 (Revisar en src/main/java/edu/eci/arsw/TicTacToe/model)
 
 Se crea la clase player y se agregan los atributos principales getters y setters.
 
-En la clase Game, se identifica toda la lógica para implementar un tablero concurrente, es decir, acá se encuentra toda 
-la lógica de los hilos (threads).
+En la clase Game, se implemeta toda la lógica del juego,
 
-5. Se agrega el controlador que, en pocas palabras, agrupa los endpoints en métodos que atienden peticiones HTTP.
+4. Se agrega el handler que se encargará de gestionar las peticiones WebScockets.
 
-(Revisar src/main/java/edu/eci/arsw/TicTacToe/controllers/TTTController.java)
+(Revisar src/main/java/edu/eci/arsw/TicTacToe/handler/GameWebSocketHandler.java)
 
-6. Endpoints
-7. Se añade la clase Config que permite 
+Se agregan todos los método necesarios para la gestión de peticiones.
+
+6. Se añade la clase Config que configura el soporte para WebSockets en una aplicación Spring Boot.
+
+(Revisar src/main/java/edu/eci/arsw/TicTacToe/config/WebSocketConfig.java)
+
+---
+### Front
+
+1. Previamente se construyó todo el FRONT, se encuentra en la carpeta src/main/resources/static.
+
+2. Para hacer los requisitos de crear una sala y que se puedan unir, se debe crear un script websocket-client.
+
+Este código define una clase JavaScript llamada GameClient, es un cliente Websockets  necesario para comunicarse en tiempo real con un servidor.
+
+(Revisar src/main/resources/static/js/websocket-client.js)
+
+3. Se añade script con información del lobby, al necesitar la creación de varias salas, requiere este componente para la gestión de las mismas.
+
+(Revisar src/main/resources/static/js/components/Lobby.js)
+
+---
+
+## Juego funcionando
+
+Se ejecuta el código.
+
+Vista del cliente 1:
+
+![img](img/cliente1.png)
+
+Vista del cliente 2
+
+![img](img/vistaCompleta.png)
+
+Cuando gana un jugador.
+
+![img](img/ganador.png)
 

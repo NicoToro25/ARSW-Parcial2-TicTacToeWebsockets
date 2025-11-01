@@ -1,10 +1,13 @@
 package edu.eci.arsw.TicTacToe.model;
 
 public class Player {
+
+    // Atributos necesarios
     private String id;
     private String sessionId;
     private String symbol;
 
+    //Constructor
     public Player(){
     }
     public Player(String id, String sessionId) {
@@ -13,8 +16,6 @@ public class Player {
     }
 
     // Getters y setters
-
-
     public String getId() {
         return id;
     }
