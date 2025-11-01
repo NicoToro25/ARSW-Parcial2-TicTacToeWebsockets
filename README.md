@@ -1,6 +1,6 @@
-# Arquitecturas de Software (ARSW)
+# Arquitecturas de Software (ARSW) - Parcial #2
 
-## Tic Tac Toe
+## Tic Tac Toe con WebSockets
 
 #### Nicolás Toro
 
@@ -9,10 +9,9 @@
 
 ---
 
-En este repositorio se muestra la solución de la introducción a WebSockets y el laboratorio 7. Para ver la información detallada
-entrar en la carpeta introducción o laboratorio7 para encontrar el enunciado
+En este repositorio se muestra la solucion al parcial #2 del curso de arquitectura de software (ARSW), se busca implementar
+el juego tic tac toe con WebScockets, demostrando las habilidades técnicas adquiridas en el curso.
 
-ESCRIBIR SOLUCIÓN
 
 ## Estructura del laboratorio
 
@@ -43,7 +42,7 @@ mvn -version
 Si aún no tiene el repositorio localmente, clónelo con:
 
 ```bash
-git clone https://github.com/NicoToro25/ARSW-Tic-Tac-Toe.git
+git clone https://github.com/NicoToro25/ARSW-Parcial2-TicTacToeWebsockets.git
 ```
 
 #### 3. Compilar los proyectos
@@ -69,9 +68,39 @@ Si se tiene algún inconveniente con la ejecución, asegúrarse de que las varia
 
 ---
 
-1. Se crea la estructura básica del proyecto, se crea la carpeta static.
+1. Como primer paso, se crea el proyecto usando spring initializr y se modifica el poim.xml con las dependencias necesarias.
+Se recomienda mirar el pom.xml y verificar las siguientes dependencias:
 
-2. Se añade el código para el Tic Tac Toe.
+```` bash
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+````
 
-**Nota:** Para verlo funcionando se debe agregar la dependencia starter-web
+2. Previamente se construyo todo el FRONT, se encuentra en la carpeta src/main/resources/static.
+
+3. Como en un comienzo el proyecto fue hecho con toda la lógica desde el FRONT, se migra dicha lógica al back con el modelo: MVC.
+
+(Se tuvo que configurar el JDK)
+
+4. Se comienza identificando el modelo que consta de dos clases jugador y y juego.
+
+(Revisar en src/main/java/edu/eci/arsw/TicTacToe/model)
+
+Se crea la clase player y se agregan los atributos principales getters y setters.
+
+En la clase Game, se identifica toda la lógica para implementar un tablero concurrente, es decir, acá se encuentra toda 
+la lógica de los hilos (threads).
+
+5. Se agrega el controlador que, en pocas palabras, agrupa los endpoints en métodos que atienden peticiones HTTP.
+
+(Revisar src/main/java/edu/eci/arsw/TicTacToe/controllers/TTTController.java)
+
+6. Endpoints
+7. Se añade la clase Config que permite 
 
