@@ -110,16 +110,6 @@ public class GameWebSocketHandler implements WebSocketHandler{
 
         Game game = games.get(gameId);
 
-        if (game == null) {
-            sendErrorMessage(session, "Juego no encontrado: " + gameId);
-            return;
-        }
-
-        if (game.getPlayerCount() >= 2) {
-            sendErrorMessage(session, "Juego lleno: " + gameId);
-            return;
-        }
-
         String playerId = "player_" + session.getId();
         Player player = new Player(playerId, session.getId());
 
@@ -153,10 +143,6 @@ public class GameWebSocketHandler implements WebSocketHandler{
         }
 
         String gameId = sessionGameMap.get(session.getId());
-        if (gameId == null) {
-            sendErrorMessage(session, "No estás en un juego");
-            return;
-        }
 
         Game game = games.get(gameId);
         if (game == null) {
