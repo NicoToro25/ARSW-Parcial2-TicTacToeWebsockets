@@ -1,0 +1,103 @@
+/* css/styles.css */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+.game {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.game-board {
+    margin-right: 20px;
+}
+
+.board-row {
+    display: flex;
+}
+
+.square {
+    background: #fff;
+    border: 2px solid #333;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 60px;
+    height: 60px;
+    width: 60px;
+    margin-right: -2px;
+    margin-top: -2px;
+    padding: 0;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.square:hover {
+    background-color: #e9e9e9;
+}
+
+.square:focus {
+    outline: none;
+    background-color: #ddd;
+}
+
+.status {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.game-info {
+    min-width: 200px;
+}
+
+.game-info ol {
+    padding-left: 20px;
+}
+
+.game-info li {
+    margin-bottom: 5px;
+}
+
+.game-info button {
+    background: #4a90e2;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.game-info button:hover {
+    background: #357ae8;
+}
+
+.winner {
+    background-color: #4CAF50 !important;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .game {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .game-board {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+}
